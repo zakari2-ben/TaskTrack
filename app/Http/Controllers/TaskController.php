@@ -17,21 +17,31 @@ class TaskController extends Controller
 
     //set a task :
     public function store (Request $request){
-        $task = Task::create(
+
+        $validatedate = $request->validate(
             [
-                'title'=>$request->title,
-                'description'=>$request->description,
-                'priority'=>$request->priority
+                'title'=>'required|string|max:60',
+                'description'=>'nullable|string',
+                'priority'=>'required|integer|min:1|max:5',
             ]
             );
-            return response()->json($task,201);
+
+            $task = Task::create($validatedate);
+            return response()->json($task, 201);
     }
 
     //update a task :
     public function update(Request $request,$id) {
 
         $task = Task::findorFail($id);
-        $task->update($request->all());
+        $validatedate = $request->validate(
+            [
+                'title'=>'sometimes|required|string|max:60',
+                'description'=>'sometimes|nullable|string',
+                'priority'=>'sometimes|required|integer|min:1|max:5',
+            ]
+            );
+        $task->update($validatedate);
         return response()->json($task,200);
 
     }
