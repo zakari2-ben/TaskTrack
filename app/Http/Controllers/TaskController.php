@@ -5,14 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\updateTaskRequest;
 use App\Models\Task;
-use GuzzleHttp\Psr7\Request as Psr7Request;
-use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 class TaskController extends Controller
 {
-    //get informations :
+     //get informations :
     public function index()
     {
         $task = Task::all();
