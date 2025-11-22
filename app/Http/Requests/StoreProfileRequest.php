@@ -11,7 +11,7 @@ class StoreProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,9 +23,9 @@ class StoreProfileRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'phone' => 'required|max:15',
+            'phone' => 'required|string|max:15',
             'adress' => 'nullable|string|max:100',
-            'date_of_birth' => 'nuulable|date',
+            'date_of_birth' => 'nullable|date',
             'bio' => 'nullable|string'
         ];
     }
