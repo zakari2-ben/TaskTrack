@@ -8,8 +8,14 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
+    public function show ($id){
+        $profile = Profile::where('user_id',$id)->firstOrFail();
+        return response()->json($profile, 200);
+    }
+
     public function store(StoreProfileRequest $request){
-        $profile = Profile::create($request->validate());
+        
+        $profile = Profile::create($request->validated());
         return response()->json(
             [
                 'message' => 'profile created successfully',
