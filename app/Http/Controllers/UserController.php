@@ -47,12 +47,12 @@ class UserController extends Controller
     // get tasks
     public function getUserTasks($id)
     {
-        $user = User::with('tasks')->findOrFail($id);
+        $tasks = User::with('tasks')->findOrFail($id)->tasks;
 
-        if (!$user->tasks) {
+        if (!$tasks) {
             return response()->json(['message' => 'tasks not found'], 404);
         }
-        return response()->json($user->tasks, 200);
+        return response()->json($tasks, 200);
     }
 
 }

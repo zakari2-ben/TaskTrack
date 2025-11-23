@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\updateTaskRequest;
 use App\Models\Task;
+use App\Models\User;
+use Illuminate\Console\View\Components\Task as ComponentsTask;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -46,5 +48,17 @@ class TaskController extends Controller
         $task = Task::findorFail($id);
         $task->delete();
         return response()->json(null, 204);
+    }
+
+    // get user by his task :
+    
+    public function getTaskUser($id)
+    {
+        $user = Task::with('user')->findOrFail($id)->user;
+
+        if (!$user) {
+            return response()->json(['message' => 'tasks not found'], 404);
+        }
+        return response()->json($user, 200);
     }
 }
