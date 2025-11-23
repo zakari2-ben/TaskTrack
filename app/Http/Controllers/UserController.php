@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
+    // get profiles
     public function getProfile($id)
     {
         $user = User::with('profile')->findOrFail($id);
@@ -19,10 +19,11 @@ class UserController extends Controller
         if (!$user->profile) {
             return response()->json(['message' => 'Profile not found'], 404);
         }
-
         return response()->json($user->profile, 200);
     }
 
+
+    // get users
     public function getAllUsers()
     {
 
@@ -30,6 +31,7 @@ class UserController extends Controller
         return response()->json($users, 200);
     }
 
+    // update profile
     public function updateProfile(UpdateProfileRequest $request, $id)
     {
         $user = User::findOrFail($id);
@@ -41,4 +43,16 @@ class UserController extends Controller
             'profile' => $profile
         ], 200);
     }
+
+    // get tasks
+    public function getUserTasks($id)
+    {
+        $user = User::with('tasks')->findOrFail($id);
+
+        if (!$user->tasks) {
+            return response()->json(['message' => 'tasks not found'], 404);
+        }
+        return response()->json($user->tasks, 200);
+    }
+
 }
