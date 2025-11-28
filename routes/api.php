@@ -34,7 +34,7 @@ Route::get('task/{id}/user', [TaskController::class, 'getTaskUser']);
 // add categories to tasks :
 Route::post('tasks/{taskId}/categories', [TaskController::class, 'addCategoriesToTask']);
 Route::get('tasks/{tasksId}/categories', [TaskController::class, 'getTaskCategories']);
-// Route::get('categories/{categoryId/tasks', [TaskController::class, 'getCategoriesTasks']);
+Route::get('categories/{categoryId}/tasks', [TaskController::class, 'getCategoriesTasks']);
 
 
 
