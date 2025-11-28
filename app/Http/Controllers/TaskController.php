@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-     //get informations :
+    //get informations :
     public function index()
     {
         $task = Task::all();
@@ -52,7 +52,7 @@ class TaskController extends Controller
     }
 
     // get user by his task :
-    
+
     public function getTaskUser($id)
     {
         $user = Task::with('user')->findOrFail($id)->user;
@@ -66,14 +66,31 @@ class TaskController extends Controller
     // function to add categories to taks :
 
     public function addCategoriesToTask(AddCategToTaskRequest $request, $taskId)
-{
-    $task = Task::findOrFail($taskId);
+    {
+        $task = Task::findOrFail($taskId);
 
-    $task->categories()->syncWithoutDetaching($request->validated()['categories']);
+        $task->categories()->syncWithoutDetaching($request->validated()['categories']);
 
-    return response()->json([
-        'message' => 'Categories added to task successfully',
-        'task'    => $task->load('categories')
-    ], 200);
-}
+        return response()->json([
+            'message' => 'Categories added to task successfully',
+            'task'    => $task->load('categories')
+        ], 200);
+    }
+
+    // get categories of task :
+
+
+
+    public function getTaskCategories($taskId)
+    {
+        // get id task 
+        $task = Task::findOrFail($taskId);
+
+        $categories = $task->categories;
+
+        return response()->json([
+            'task_id' => $task->id,
+            'categories' => $categories
+        ], 200);
+    }
 }
