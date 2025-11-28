@@ -33,6 +33,6 @@ class AddCategToTaskRequest extends FormRequest
             'categories.required' => 'Categories field is required.',
             'categories.array'    => 'Categories must be an array.',
             'categories.*.exists' => 'One or more selected categories do not exist.',
-        ];
+        ]; 
     }
 }
