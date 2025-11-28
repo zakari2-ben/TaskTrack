@@ -20,15 +20,21 @@ Route::get('/user', function (Request $request) {
 
 // Route::delete('tasks/{id}', [TaskController::class, 'destroy']);
 
-Route::apiResource('tasks', TaskController::class);
 Route::post('profile', [ProfileController::class, 'store']);
 Route::get('profile/{id}', [ProfileController::class, 'show']);
 Route::get('user/{id}/profile', [UserController::class, 'getProfile']);
 
 Route::get('users', [UserController::class, 'getAllUsers']);
-
 Route::put('user/{id}/profile', [UserController::class, 'updateProfile']);
 Route::put('user/{id}/tasks', [UserController::class, 'getUserTasks']);
+
+Route::apiResource('tasks', TaskController::class);
 Route::get('task/{id}/user', [TaskController::class, 'getTaskUser']);
+
+// add categories to tasks :
+Route::post('tasks/{taskId}/categories', [TaskController::class, 'addCategoriesToTask']);
+// Route::get('tasks/{tasksId}/categories', [TaskController::class, 'getTaskCategories']);
+// Route::get('categories/{categoryId/tasks', [TaskController::class, 'getCategoriesTasks']);
+
 
 
