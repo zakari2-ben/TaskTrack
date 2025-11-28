@@ -26,12 +26,12 @@ Route::get('user/{id}/profile', [UserController::class, 'getProfile']);
 
 Route::get('users', [UserController::class, 'getAllUsers']);
 Route::put('user/{id}/profile', [UserController::class, 'updateProfile']);
-Route::put('user/{id}/tasks', [UserController::class, 'getUserTasks']);
+Route::put('user/{id}/tasks', [UserController::class, 'getUserTasks']); 
 
 Route::apiResource('tasks', TaskController::class);
 Route::get('task/{id}/user', [TaskController::class, 'getTaskUser']);
 
-// add categories to tasks :
+// categories & tasks :
 Route::post('tasks/{taskId}/categories', [TaskController::class, 'addCategoriesToTask']);
 Route::get('tasks/{tasksId}/categories', [TaskController::class, 'getTaskCategories']);
 Route::get('categories/{categoryId}/tasks', [TaskController::class, 'getCategoriesTasks']);
