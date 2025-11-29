@@ -36,5 +36,9 @@ Route::post('tasks/{taskId}/categories', [TaskController::class, 'addCategoriesT
 Route::get('tasks/{tasksId}/categories', [TaskController::class, 'getTaskCategories']);
 Route::get('categories/{categoryId}/tasks', [TaskController::class, 'getCategoriesTasks']);
 
+// login et register et logout 
+
+Route::post('register', [UserController::class, 'register']);
+
 
 
