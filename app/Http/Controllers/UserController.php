@@ -14,7 +14,7 @@ use Nette\Utils\Json;
 
 class UserController extends Controller
 {
-
+    // register :
     public function register(Request $request)
     {
         $validateData = $request->validate([
@@ -35,7 +35,7 @@ class UserController extends Controller
     }
 
 
-
+    // login :
     public function login(Request $request)
     {
         // validation
@@ -62,14 +62,30 @@ class UserController extends Controller
             'token_type' => 'Bearer',
             'user' => $user
         ], 200);
-
     }
 
 
+    // logout :
+    public function logout(Request $request)
+    {
 
-    public function logout() {
+        $request->user->currentAccessToken()->delete();
 
+        return response()->json([
+            'message' => 'Logged out successfully',
+        ], 200);
     }
+
+    // if you want to logout in all tokens :
+
+    // public function logout(Request $request)
+    // {
+    //     $request->user()->tokens()->delete();
+
+    //     return response()->json([
+    //         'message' => 'Logged out from all devices'
+    //     ], 200);
+    // }
 
 
 
