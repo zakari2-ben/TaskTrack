@@ -39,6 +39,8 @@ Route::get('categories/{categoryId}/tasks', [TaskController::class, 'getCategori
 // login et register et logout 
 
 Route::post('register', [UserController::class, 'register']);
+Route::post('login', [UserController::class, 'login']);
+
 
 
 
