@@ -6,11 +6,52 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
 use App\Models\User;
-
+use Illuminate\Contracts\Support\ValidatedData;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function register (Request $request){
+        $validateData = $request->validate([
+            'name'=>'required|string|max:255',
+            'email'=>'required|string|email|max:255|unique:users,email',
+            'password'=>'required|string|min:8|confirmed'
+        ]);
+        $user = User::create([
+            'name'=>$validateData['name'],
+            'email'=>$validateData['email'],
+            'password'=>Hash::make($validateData['password'])
+        ]);
+
+        return response()->json([
+            'message' => 'User registed successfully',
+            'user' => $user
+        ],201);
+    }
+
+
+
+    public function login (Request $request){
+        $validateData = $request->validate([
+            'email'=>'required|string|email|max:255',
+            'password'=>'required|string'
+        ]);
+    }
+
+
+
+    public function logout (){
+        
+    }
+
+
+
+
+
+
     // get profiles
     public function getProfile($id)
     {
