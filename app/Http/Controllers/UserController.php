@@ -10,41 +10,65 @@ use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Nette\Utils\Json;
 
 class UserController extends Controller
 {
 
-    public function register (Request $request){
+    public function register(Request $request)
+    {
         $validateData = $request->validate([
-            'name'=>'required|string|max:255',
-            'email'=>'required|string|email|max:255|unique:users,email',
-            'password'=>'required|string|min:8|confirmed'
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
         ]);
         $user = User::create([
-            'name'=>$validateData['name'],
-            'email'=>$validateData['email'],
-            'password'=>Hash::make($validateData['password'])
+            'name' => $validateData['name'],
+            'email' => $validateData['email'],
+            'password' => Hash::make($validateData['password'])
         ]);
 
         return response()->json([
             'message' => 'User registed successfully',
             'user' => $user
-        ],201);
+        ], 201);
     }
 
 
 
-    public function login (Request $request){
-        $validateData = $request->validate([
-            'email'=>'required|string|email|max:255',
-            'password'=>'required|string'
+    public function login(Request $request)
+    {
+        // validation
+        $validatedData = $request->validate([
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string',
         ]);
+
+        // get user
+        $user = User::where('email', $validatedData['email'])->first();
+
+        if (!$user || !Hash::check($validatedData['password'], $user->password)) {
+            return response()->json([
+                'message' => 'Invalid email or password'
+            ], 401);
+        }
+
+        // create token
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login successful',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user
+        ], 200);
+
     }
 
 
 
-    public function logout (){
-        
+    public function logout() {
+
     }
 
 
@@ -93,7 +117,6 @@ class UserController extends Controller
         if (!$tasks) {
             return response()->json(['message' => 'tasks not found'], 404);
         }
-        return response()->json($tasks, 200); 
+        return response()->json($tasks, 200);
     }
-
 }
