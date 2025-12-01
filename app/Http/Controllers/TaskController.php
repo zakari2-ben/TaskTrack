@@ -17,8 +17,8 @@ class TaskController extends Controller
     //get informations :
     public function index()
     {
-        $task = Task::all();
-        return response()->json($task, 200);
+        $tasks = Auth::user()->tasks;
+        return response()->json($tasks, 200);
     }
 
     //set a task :
@@ -34,7 +34,13 @@ class TaskController extends Controller
     //update a task :
     public function update(updateTaskRequest $request, $id)
     {
+        $user_id = Auth::user()->id;
         $task = Task::findorFail($id);
+        if ($task->id != $user_id){
+            return response()->json([
+                'message' => 'Unauthurized action'
+            ],403);
+        }
         $task->update($request->validated());
         return response()->json($task, 200);
     }
