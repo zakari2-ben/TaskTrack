@@ -10,27 +10,37 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Console\View\Components\Task as ComponentsTask;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     //get informations :
     public function index()
     {
-        $task = Task::all();
-        return response()->json($task, 200);
+        $tasks = Auth::user()->tasks;
+        return response()->json($tasks, 200);
     }
 
     //set a task :
     public function store(StoreTaskRequest $request)
     {
-        $task = Task::create($request->Validated());
+        $user_id = Auth::user()->id;
+        $validateData = $request->validated();
+        $validateData['user_id'] = $user_id;
+        $task = Task::create($validateData);
         return response()->json($task, 201);
     }
 
     //update a task :
     public function update(updateTaskRequest $request, $id)
     {
+        $user_id = Auth::user()->id;
         $task = Task::findorFail($id);
+        if ($task->user_id != $user_id) {
+            return response()->json([
+                'message' => 'Unauthurized action'
+            ], 403);
+        }
         $task->update($request->validated());
         return response()->json($task, 200);
     }
@@ -38,17 +48,30 @@ class TaskController extends Controller
     //show tasks : 
     public function show($id)
     {
+        $task = Task::findOrFail($id); 
 
-        $task = Task::findorFail($id);
+        if ($task->user_id !== Auth::id()) {
+            return response()->json([
+                'message' => 'Unauthorized action'
+            ], 403);
+        }
+
         return response()->json($task, 200);
     }
 
     //delet task :
     public function destroy($id)
     {
+        $task = Task::findOrFail($id);
 
-        $task = Task::findorFail($id);
+        if ($task->user_id !== Auth::id()) {
+            return response()->json([
+                'message' => 'Unauthorized action'
+            ], 403);
+        }
+
         $task->delete();
+
         return response()->json(null, 204);
     }
 
