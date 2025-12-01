@@ -36,10 +36,10 @@ class TaskController extends Controller
     {
         $user_id = Auth::user()->id;
         $task = Task::findorFail($id);
-        if ($task->id != $user_id){
+        if ($task->user_id != $user_id) {
             return response()->json([
                 'message' => 'Unauthurized action'
-            ],403);
+            ], 403);
         }
         $task->update($request->validated());
         return response()->json($task, 200);
@@ -48,17 +48,30 @@ class TaskController extends Controller
     //show tasks : 
     public function show($id)
     {
+        $task = Task::findOrFail($id);
 
-        $task = Task::findorFail($id);
+        if ($task->user_id !== Auth::id()) {
+            return response()->json([
+                'message' => 'Unauthorized action'
+            ], 403);
+        }
+
         return response()->json($task, 200);
     }
 
     //delet task :
     public function destroy($id)
     {
+        $task = Task::findOrFail($id);
 
-        $task = Task::findorFail($id);
+        if ($task->user_id !== Auth::id()) {
+            return response()->json([
+                'message' => 'Unauthorized action'
+            ], 403);
+        }
+
         $task->delete();
+
         return response()->json(null, 204);
     }
 
