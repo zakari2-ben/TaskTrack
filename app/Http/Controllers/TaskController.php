@@ -10,6 +10,7 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Console\View\Components\Task as ComponentsTask;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -23,7 +24,10 @@ class TaskController extends Controller
     //set a task :
     public function store(StoreTaskRequest $request)
     {
-        $task = Task::create($request->Validated());
+        $user_id = Auth::user()->id;
+        $validateData = $request->validated();
+        $validateData['user_id'] = $user_id;
+        $task = Task::create($validateData);
         return response()->json($task, 201);
     }
 
