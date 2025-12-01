@@ -48,7 +48,7 @@ class TaskController extends Controller
     //show tasks : 
     public function show($id)
     {
-        $task = Task::findOrFail($id);
+        $task = Task::findOrFail($id); 
 
         if ($task->user_id !== Auth::id()) {
             return response()->json([
