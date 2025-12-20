@@ -134,4 +134,12 @@ class TaskController extends Controller
             'tasks' => $tasks
         ], 200);
     }
+
+    // get all tasks wher user == 'admin' else -> unthorized :
+
+    public function getAllTasks()
+    {
+        $tasks = Task::all();
+        return response()->json($tasks, 200);
+    }
 }
