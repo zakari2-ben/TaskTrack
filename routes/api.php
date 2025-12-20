@@ -29,6 +29,7 @@ Route::put('user/{id}/profile', [UserController::class, 'updateProfile']);
 Route::put('user/{id}/tasks', [UserController::class, 'getUserTasks']); 
 
 Route::apiResource('tasks', TaskController::class)->middleware('auth:sanctum');
+Route::get('task/all', [TaskController::class, 'getAllTasks'])->middleware('auth:sanctum')->middleware('ChechUser');
 
 Route::get('task/{id}/user', [TaskController::class, 'getTaskUser']);
 Route::post('tasks/{taskId}/categories', [TaskController::class, 'addCategoriesToTask']);
